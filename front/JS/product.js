@@ -9,7 +9,7 @@ const price = document.getElementById("price");
 const description = document.getElementById("description");
 const optionColor = document.getElementById("colors");
 const addCart = document.getElementById("addToCart");
-
+const createImg = document.createElement("img")
 
 
 function fetchProduct() {
@@ -19,7 +19,7 @@ function fetchProduct() {
 };
 
 function product(data) {
-    const createImg = document.createElement("img")
+
     itemImg.appendChild(createImg)
     createImg.src = data.imageUrl;
     createImg.alt = data.altTxt
@@ -42,10 +42,26 @@ function cart() {
     addCart.addEventListener("click", (event) => {
         const color = optionColor.value;
         const quantity = document.getElementById("quantity").value;
-        console.log(id)
-        console.log(color)
-        console.log(quantity)
+        if (color == "" || quantity <= 0) {
+            alert("veuillez selectionner une couleur et une quantité")
+        } else {
+            let data = {
+                id: id,
+                title: title.innerHTML,
+                color: color,
+                quantity: quantity,
+                img: createImg.src,
+                alt: createImg.alt,
 
+            };
+            localStorage.setItem(id, JSON.stringify(data));
+            let dataStorage = JSON.parse(localStorage.getItem("data"));
+            alert("article ajoutée")
+            // localStorage.getItem("clé");
+            // localStorage.removeItem("clé");
+            // localStorage.clear();
+           
+        }
 
     })
 
@@ -53,7 +69,7 @@ function cart() {
 
 function loadProduct() {
     fetchProduct(),
-    cart();
+        cart();
 
 };
 
