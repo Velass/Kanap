@@ -6,7 +6,7 @@ function fetchProduct() {
         .then(response => response.json())
         .then(data => {
             for (let index = 0; index < data.length; index++) {
-                items.innerHTML = items.innerHTML+ `
+                items.innerHTML += `
                 <a href=./product.html?id=${data[index]._id}>
                    <article>
                      <img src=${data[index].imageUrl} alt=${data[index].altTxt}>

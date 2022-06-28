@@ -53,6 +53,7 @@ function cart() {
                     title: title.innerHTML,
                     color: color,
                     quantity: quantity,
+                    price: price.innerHTML,
                     img: createImg.src,
                     alt: createImg.alt,
                 };
