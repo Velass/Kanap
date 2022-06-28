@@ -1,14 +1,14 @@
 
-
+const items = []
 
 
 function viewProductStorage() {
-    for (let index = 0; index < localStorage.length; index++) {
-        const product = localStorage.getItem(localStorage.key(index));
-        const productData = JSON.parse(product)
-        console.log(productData.title)
-        const cartId = document.getElementById("cart__items")
-        cartId.innerHTML += `
+  for (let index = 0; index < localStorage.length; index++) {
+    const product = localStorage.getItem(localStorage.key(index));
+    const productData = JSON.parse(product)
+    items.push(productData)
+    const cartId = document.getElementById("cart__items")
+    cartId.innerHTML += `
             <article class="cart__item" data-id="${productData.id}" data-color="${productData.color}">
         <div class="cart__item__img">
         <img src="${productData.img}"${productData.alt}">
@@ -31,14 +31,36 @@ function viewProductStorage() {
         </div>
       </article>`
 
-    };
+  };
+}
+function theQuantity() {
+  const totalQuantity = document.getElementById("totalQuantity")
+  let total = 0
+  for (let index = 0; index < items.length; index++) {
+    const quantity = items[index].quantity
+    total = parseInt(quantity, 10) + parseInt(total, 10)
+    totalQuantity.innerHTML = total
+  }
+
+}
+
+function thePrice() {
+  const totalPrice = document.getElementById("totalPrice")
+  let total = 0
+  for (let index = 0; index < items.length; index++) {
+    const price = items[index].price * items[index].quantity;
+    total = parseInt(price, 10)+ parseInt(total, 10)
+    totalPrice.innerHTML = total
+  }
 
 }
 
 
 
 function loadProduct() {
-viewProductStorage()
+  viewProductStorage(),
+    theQuantity(),
+    thePrice();
 };
 
 window.onload = loadProduct
