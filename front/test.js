@@ -60,7 +60,7 @@ function thePrice() {
 
 
 
-function update() {
+function test() {
   const itemQuantity = document.getElementsByClassName("itemQuantity")
   for (let index = 0; index < itemQuantity.length; index++) {
     itemQuantity[index].addEventListener("change", (e) => {
@@ -88,7 +88,7 @@ function loadProduct() {
   viewProductStorage();
   theQuantity();
   thePrice();
-  update();
+  test();
 
 };
 
