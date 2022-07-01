@@ -7,7 +7,6 @@ function viewProductStorage() {
     const product = localStorage.getItem(localStorage.key(index));
     const productData = JSON.parse(product)
     items.push(productData)
-    console.log(productData)
     const cartId = document.getElementById("cart__items")
     cartId.innerHTML += `
             <article class="cart__item" data-id="${productData.id}" data-color="${productData.color}">
@@ -23,7 +22,7 @@ function viewProductStorage() {
           <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
               <p>Qté : </p>
-              <input id="${productData.id}"  type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productData.quantity}">
+              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${productData.quantity}">
             </div>
             <div class="cart__item__content__settings__delete">
               <p class="deleteItem">Supprimer</p>
@@ -61,35 +60,48 @@ function thePrice() {
 
 
 function update() {
+  const cartItemInfo = document.getElementsByClassName("cart__item")
   const itemQuantity = document.getElementsByClassName("itemQuantity")
   for (let index = 0; index < itemQuantity.length; index++) {
     itemQuantity[index].addEventListener("change", (e) => {
-      let quantity 
+      let quantity
       quantity = itemQuantity[index].value
-      console.log(e)
-      const product = items.find(item => item.id == itemQuantity[index].id)
-      product.quantity = quantity
-      console.log(itemQuantity[index].value)
+      const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color)
+      productId.quantity = quantity
       theQuantity()
       thePrice()
-      console.log(quantity)
-      console.log(itemQuantity)
+      localStorage.setItem(`${items[index].id}${items[index].color}`, JSON.stringify(productId))
+
     })
-    
+
+  }
+}
+
+function deleteItemOnCart() {
+  const deleteItem = document.getElementsByClassName("deleteItem")
+  const itemQuantity = document.getElementsByClassName("itemQuantity")
+  for (let index = 0; index < deleteItem.length; index++){
+    deleteItem[index].addEventListener("click", (e) => {
+      const cartItemInfo = document.querySelector(`article[data-id="${items[index].id}"][data-color="${items[index].color}"]`);
+      
+      //const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color)
+      cartItemInfo.remove()
+      //localStorage.removeItem(`${items[index].id}${items[index].color}`)
+
+    })
+
   }
 }
 
 
 
 
-
-
 function loadProduct() {
-  viewProductStorage();
-  theQuantity();
-  thePrice();
-  update();
-
+  viewProductStorage(),
+    theQuantity(),
+    thePrice(),
+    update(),
+    deleteItemOnCart();
 };
 
 window.onload = loadProduct
