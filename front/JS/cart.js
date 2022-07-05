@@ -56,22 +56,18 @@ function thePrice() {
   totalPrice.innerHTML = total
 }
 
-
-
-
 function update() {
-  const cartItemInfo = document.getElementsByClassName("cart__item")
   const itemQuantity = document.getElementsByClassName("itemQuantity")
   for (let index = 0; index < itemQuantity.length; index++) {
     itemQuantity[index].addEventListener("change", (e) => {
       let quantity
+      const cartItemInfo = document.getElementsByClassName("cart__item")
       quantity = itemQuantity[index].value
       const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color)
       productId.quantity = quantity
+      localStorage.setItem(`${items[index].id}${items[index].color}`, JSON.stringify(productId))
       theQuantity()
       thePrice()
-      localStorage.setItem(`${items[index].id}${items[index].color}`, JSON.stringify(productId))
-
     })
 
   }
@@ -79,21 +75,30 @@ function update() {
 
 function deleteItemOnCart() {
   const deleteItem = document.getElementsByClassName("deleteItem")
-  const itemQuantity = document.getElementsByClassName("itemQuantity")
-  for (let index = 0; index < deleteItem.length; index++){
+  for (let index = 0; index < items.length; index++) {
     deleteItem[index].addEventListener("click", (e) => {
-      const cartItemInfo = document.querySelector(`article[data-id="${items[index].id}"][data-color="${items[index].color}"]`);
-      
-      //const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color)
-      cartItemInfo.remove()
-      //localStorage.removeItem(`${items[index].id}${items[index].color}`)
+      const cartItem = document.querySelector(`article[data-id="${items[index].id}"][data-color="${items[index].color}"]`);
+      items.filter(
+        (item => item.id != cartItem.attributes[1].value && item.color != cartItem.attributes[2].value)
+      )
+      cartItem.remove()
+      localStorage.removeItem(`${cartItem.attributes[1].value}${cartItem.attributes[2].value}`)
+      theQuantity()
+      thePrice()
+      location.reload()
+      //const productId = items.findIndex(item => item.id === cartItem.attributes[1].value && item.color == cartItem.attributes[2].value)
+      //localStorage.setItem(`${items[index].id}${items[index].color}`,JSON.stringify(productId))
+      //items.splice(productId, 1)
 
     })
-
+    //le array ce met a jour comparait au produit
   }
 }
 
+function order(){
 
+
+}
 
 
 function loadProduct() {
@@ -102,6 +107,7 @@ function loadProduct() {
     thePrice(),
     update(),
     deleteItemOnCart();
-};
+    order();
+  };
 
 window.onload = loadProduct

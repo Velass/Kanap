@@ -60,32 +60,65 @@ function thePrice() {
 
 
 function update() {
-  const cartItemInfo = document.getElementsByClassName("cart__item")
   const itemQuantity = document.getElementsByClassName("itemQuantity")
   for (let index = 0; index < itemQuantity.length; index++) {
     itemQuantity[index].addEventListener("change", (e) => {
-      let quantity 
+      let quantity
+      const cartItemInfo = document.getElementsByClassName("cart__item")
       quantity = itemQuantity[index].value
-      const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color )
+      const productId = items.find(item => item.id == cartItemInfo[index].dataset.id && item.color == cartItemInfo[index].dataset.color)
       productId.quantity = quantity
+      localStorage.setItem(`${items[index].id}${items[index].color}`, JSON.stringify(productId))
       theQuantity()
       thePrice()
+      console.log(quantity)
+      console.log(productId)
+      console.log(cartItemInfo[index].dataset.id, cartItemInfo[index].dataset.color)
     })
-    
+
+  }
+}
+
+function deleteItemOnCart() {
+  const deleteItem = document.getElementsByClassName("deleteItem")
+  for (let index = 0; index < items.length; index++) {
+    deleteItem[index].addEventListener("click", (e) => {
+
+      const itemKey = localStorage.getItem(localStorage.key(index))
+      const cartItem = document.querySelector(`article[data-id="${items[index].id}"][data-color="${items[index].color}"]`);
+      const productId = items.findIndex(item => item.id === cartItem.attributes[1].value && item.color == cartItem.attributes[2].value)
+      items.filter(
+        (item => item.id != cartItem.attributes[1].value && item.color != cartItem.attributes[2].value)
+      )
+      cartItem.remove()
+      localStorage.removeItem(`${cartItem.attributes[1].value}${cartItem.attributes[2].value}`)
+      theQuantity()
+      thePrice()
+      location.reload()
+ 
+      //localStorage.setItem(`${items[index].id}${items[index].color}`,JSON.stringify(productId))
+      //items.splice(productId, 1)
+      console.log(items.id == cartItem.attributes[1].value && items.color == cartItem.attributes[2].value)
+      console.log(productId)
+      console.log(cartItem.attributes[1].value, cartItem.attributes[2].value)
+      console.log(items)
+      console.log(cartItem)
+      console.log(items.splice(productId, 1))
+
+    })
+    //le array ce met a jour comparait au produit
   }
 }
 
 
 
 
-
-
 function loadProduct() {
-  viewProductStorage();
-  theQuantity();
-  thePrice();
-  update();
-
+  viewProductStorage(),
+    theQuantity(),
+    thePrice(),
+    update(),
+    deleteItemOnCart();
 };
 
 window.onload = loadProduct
