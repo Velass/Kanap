@@ -86,20 +86,22 @@ function deleteItemOnCart() {
       theQuantity()
       thePrice()
       location.reload()
-      //const productId = items.findIndex(item => item.id === cartItem.attributes[1].value && item.color == cartItem.attributes[2].value)
-      //localStorage.setItem(`${items[index].id}${items[index].color}`,JSON.stringify(productId))
-      //items.splice(productId, 1)
-
     })
-    //le array ce met a jour comparait au produit
+    
   }
 }
 
 function order(){
-
+const orderButton = document.getElementById("order")
+orderButton.addEventListener("click", (e) => giveOrder(e))
 
 }
 
+function giveOrder(e){
+  e.preventDefault()
+  const cartOrder = document.getElementsByClassName("cart__order__form")
+  console.log(cartOrder.elements)
+}
 
 function loadProduct() {
   viewProductStorage(),
