@@ -87,21 +87,63 @@ function deleteItemOnCart() {
       thePrice()
       location.reload()
     })
-    
+
   }
 }
 
-function order(){
-const orderButton = document.getElementById("order")
-orderButton.addEventListener("click", (e) => giveOrder(e))
+function order() {
+  const orderButton = document.getElementById("order")
+  orderButton.addEventListener("click", (event) => giveOrder(event))
 
 }
 
-function giveOrder(e){
-  e.preventDefault()
+function giveOrder(event) {
+  event.preventDefault()
   const cartOrder = document.getElementsByClassName("cart__order__form")
-  console.log(cartOrder.elements)
+  const body = contacts()
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/JSON"
+    }
+
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+  console.log(cartOrder[0].elements)
+
 }
+
+function contacts() {
+  const cartOrder = document.getElementsByClassName("cart__order__form")
+  const body = {
+    contact: {
+      firstName: cartOrder[0].elements[0].value,
+      lastName: cartOrder[0].elements[1].value,
+      address: cartOrder[0].elements[2].value,
+      city: cartOrder[0].elements[3].value,
+      email: cartOrder[0].elements[4].value,
+      
+    },
+    products: contactProductId()
+  }
+  
+  return body
+}
+
+function contactProductId() {
+  
+  const cartItemInfo = document.getElementsByClassName("cart__item")
+   const productIds = []
+  for (let index = 0; index < cartItemInfo.length; index++) {
+    productId = [cartItemInfo[index].dataset.id];
+    productIds.push(productId)
+  }
+  console.log(productIds)
+  return productIds
+}
+
 
 function loadProduct() {
   viewProductStorage(),
@@ -109,7 +151,7 @@ function loadProduct() {
     thePrice(),
     update(),
     deleteItemOnCart();
-    order();
-  };
+  order();
+};
 
 window.onload = loadProduct
