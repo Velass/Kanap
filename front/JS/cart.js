@@ -99,6 +99,9 @@ function order() {
 
 function giveOrder(event) {
   event.preventDefault()
+  if (items.length === 0){
+    alert("veuillez sélectionner un produit")
+  }
   const cartOrder = document.getElementsByClassName("cart__order__form")
   const body = contacts()
   fetch("http://localhost:3000/api/products/order", {
@@ -112,6 +115,7 @@ function giveOrder(event) {
     .then(response => response.json())
     .then(data => console.log(data))
   console.log(cartOrder[0].elements)
+  formValid()
 
 }
 
@@ -124,24 +128,110 @@ function contacts() {
       address: cartOrder[0].elements[2].value,
       city: cartOrder[0].elements[3].value,
       email: cartOrder[0].elements[4].value,
-      
+
     },
     products: contactProductId()
   }
-  
+
   return body
 }
 
 function contactProductId() {
-  
+
   const cartItemInfo = document.getElementsByClassName("cart__item")
-   const productIds = []
+  const productIds = []
   for (let index = 0; index < cartItemInfo.length; index++) {
     productId = [cartItemInfo[index].dataset.id];
     productIds.push(productId)
   }
   console.log(productIds)
   return productIds
+}
+
+function formValid() {
+const inputFirstName = document.getElementById("firstName")
+const inputLastName = document.getElementById("lastName")
+const inputAddress = document.getElementById("address")
+const inputCity = document.getElementById("city")
+const inputEmail = document.getElementById("email")
+inputFirstName.addEventListener("change",() => firstName())
+inputLastName.addEventListener("change",() => lastName())
+inputAddress.addEventListener("change",() => address())
+inputCity.addEventListener("change",() => city())
+inputEmail.addEventListener("change", () => email())
+
+}
+
+function firstName(){
+  const firstNameRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+  const firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
+  let inputFirstName = document.getElementById("firstName")
+  if(firstNameRegExp.test(inputFirstName.value)){
+    firstNameErrorMsg.textContent = "";
+    return true;
+    
+  }else {
+    firstNameErrorMsg.textContent= "Merci de bien vouloir saisir un Prénom valide"
+    return false;
+  }
+
+}
+
+function lastName(){
+  const lastNameRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+  const lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
+  let inputLastName = document.getElementById("lastName")
+  if(lastNameRegExp.test(inputLastName.value)){
+    lastNameErrorMsg.textContent = "";
+    return true;
+    
+  }else {
+    lastNameErrorMsg.textContent = "Merci de bien vouloir saisir un Nom valide"
+    return false;
+  }
+
+}
+
+function address(){
+  const addressRegExp = /^[a-zA-Zéèàç0-9\s,. '-]{3,}$/
+  const addressErrorMsg = document.getElementById("addressErrorMsg")
+  let inputAddress = document.getElementById("address")
+  if(addressRegExp.test(inputAddress.value)){
+    addressErrorMsg.textContent = "";
+    return true;
+    
+  }else {
+    addressErrorMsg.textContent = "Merci de bien vouloir saisir une Adresse valide"
+    return false;
+  }
+}
+
+function city(){
+  const cityRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+  const cityErrorMsg = document.getElementById("cityErrorMsg")
+  let inputCity = document.getElementById("city")
+  if(cityRegExp.test(inputCity.value)){
+    cityErrorMsg.textContent = "";
+    return true;
+    
+  }else {
+    cityErrorMsg.textContent = "Merci de bien vouloir saisir une Ville valide"
+    return false;
+  }
+
+}
+function email(){
+  const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[a-z]{2,4}$/g;
+  const emailErrorMsg = document.getElementById("emailErrorMsg")
+  let inputEmail = document.getElementById("email")
+  if(emailRegExp.test(inputEmail.value)){
+    emailErrorMsg.textContent = "";
+    return true;
+    
+  }else {
+    emailErrorMsg.textContent = "Merci de bien vouloir saisir un Email valide"
+    return false;
+  }
 }
 
 
@@ -152,6 +242,7 @@ function loadProduct() {
     update(),
     deleteItemOnCart();
   order();
+  formValid();
 };
 
 window.onload = loadProduct
