@@ -99,23 +99,28 @@ function order() {
 
 function giveOrder(event) {
   event.preventDefault()
-  if (items.length === 0){
-    alert("veuillez sélectionner un produit")
-  }
-  const cartOrder = document.getElementsByClassName("cart__order__form")
-  const body = contacts()
-  fetch("http://localhost:3000/api/products/order", {
-    method: "POST",
-    body: JSON.stringify(body),
-    headers: {
-      "Content-Type": "application/JSON"
-    }
-
-  })
+  if (items.length === 0 || firstName() === false || lastName() === false || address() === false || city() === false || email() === false) {
+    alert("veuillez sélectionner un produit et bien remplir le formulaire")
+    formValid()
+  }else{
+    const body = contacts()
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-Type": "application/JSON"
+      }
+      
+    })
     .then(response => response.json())
-    .then(data => console.log(data))
-  console.log(cartOrder[0].elements)
-  formValid()
+    .then((data) => {
+      const dataOrderId = data.orderId
+      window.location.href = "/html/confirmation.html"+ "?orderId=" + dataOrderId
+      
+    })
+
+  }
+  
 
 }
 
@@ -144,91 +149,91 @@ function contactProductId() {
     productId = [cartItemInfo[index].dataset.id];
     productIds.push(productId)
   }
-  console.log(productIds)
   return productIds
 }
 
-function formValid() {
-const inputFirstName = document.getElementById("firstName")
-const inputLastName = document.getElementById("lastName")
-const inputAddress = document.getElementById("address")
-const inputCity = document.getElementById("city")
-const inputEmail = document.getElementById("email")
-inputFirstName.addEventListener("change",() => firstName())
-inputLastName.addEventListener("change",() => lastName())
-inputAddress.addEventListener("change",() => address())
-inputCity.addEventListener("change",() => city())
-inputEmail.addEventListener("change", () => email())
+function formValid(event) {
+  const inputFirstName = document.getElementById("firstName")
+  const inputLastName = document.getElementById("lastName")
+  const inputAddress = document.getElementById("address")
+  const inputCity = document.getElementById("city")
+  const inputEmail = document.getElementById("email")
+    inputFirstName.addEventListener("change", () => firstName())
+    inputLastName.addEventListener("change", () => lastName())
+    inputAddress.addEventListener("change", () => address())
+    inputCity.addEventListener("change", () => city())
+    inputEmail.addEventListener("change", () => email())
+  
 
 }
 
-function firstName(){
-  const firstNameRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+function firstName() {
+  const firstNameRegExp = /^(?=.{3,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
   const firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
   let inputFirstName = document.getElementById("firstName")
-  if(firstNameRegExp.test(inputFirstName.value)){
+  if (firstNameRegExp.test(inputFirstName.value)) {
     firstNameErrorMsg.textContent = "";
     return true;
     
-  }else {
-    firstNameErrorMsg.textContent= "Merci de bien vouloir saisir un Prénom valide"
+  } else {
+    firstNameErrorMsg.textContent = "Merci de bien vouloir saisir un Prénom valide"
     return false;
+    
   }
-
+  
 }
-
-function lastName(){
-  const lastNameRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+function lastName() {
+  const lastNameRegExp = /^(?=.{3,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
   const lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
   let inputLastName = document.getElementById("lastName")
-  if(lastNameRegExp.test(inputLastName.value)){
+  if (lastNameRegExp.test(inputLastName.value)) {
     lastNameErrorMsg.textContent = "";
     return true;
     
-  }else {
+  } else {
     lastNameErrorMsg.textContent = "Merci de bien vouloir saisir un Nom valide"
     return false;
   }
 
 }
 
-function address(){
-  const addressRegExp = /^[a-zA-Zéèàç0-9\s,. '-]{3,}$/
+function address() {
+  const addressRegExp = /^(?=.{3,50}$)[a-zA-Zéèàç0-9\s,. '-]{3,}$/
   const addressErrorMsg = document.getElementById("addressErrorMsg")
   let inputAddress = document.getElementById("address")
-  if(addressRegExp.test(inputAddress.value)){
+  if (addressRegExp.test(inputAddress.value)) {
     addressErrorMsg.textContent = "";
     return true;
-    
-  }else {
+
+  } else {
     addressErrorMsg.textContent = "Merci de bien vouloir saisir une Adresse valide"
     return false;
   }
 }
 
-function city(){
-  const cityRegExp = /^(?=.{1,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
+function city() {
+  const cityRegExp = /^(?=.{3,50}$)[a-zA-Zéèà-]+(?:['_.\s][a-zA-Zéèà-]+)*$/
   const cityErrorMsg = document.getElementById("cityErrorMsg")
   let inputCity = document.getElementById("city")
-  if(cityRegExp.test(inputCity.value)){
+  if (cityRegExp.test(inputCity.value)) {
     cityErrorMsg.textContent = "";
     return true;
-    
-  }else {
+
+  } else {
     cityErrorMsg.textContent = "Merci de bien vouloir saisir une Ville valide"
     return false;
   }
 
 }
-function email(){
+function email() {
   const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[a-z]{2,4}$/g;
   const emailErrorMsg = document.getElementById("emailErrorMsg")
   let inputEmail = document.getElementById("email")
-  if(emailRegExp.test(inputEmail.value)){
+  if (emailRegExp.test(inputEmail.value)) {
     emailErrorMsg.textContent = "";
     return true;
-    
-  }else {
+
+  } else {
     emailErrorMsg.textContent = "Merci de bien vouloir saisir un Email valide"
     return false;
   }
@@ -241,7 +246,7 @@ function loadProduct() {
     thePrice(),
     update(),
     deleteItemOnCart();
-  order();
+  order(),
   formValid();
 };
 
