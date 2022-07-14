@@ -1,3 +1,4 @@
+// Affichage de la liste des produits
 
 const items = document.getElementById("items")
 

@@ -1,3 +1,4 @@
+// Affichage du produit et de ses informations
 
 const windowsSearch = (window.location.search);
 const url = new URLSearchParams(windowsSearch)
@@ -34,9 +35,11 @@ function product(data) {
 
 };
 
+// Enregistrement dans le localstorage
+
 function cart() {
 
-    addCart.addEventListener("click", (event) => {
+    addCart.addEventListener("click", () => {
         const color = optionColor.value;
         const quantity = document.getElementById("quantity").value;
         if (color == "" || quantity <= 0) {

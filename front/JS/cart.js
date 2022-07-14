@@ -1,6 +1,8 @@
 
+
 const items = []
 
+// Affichage de(s) produit(s) via le localstorage et création du DOM via le templating
 
 function viewProductStorage() {
   for (let index = 0; index < localStorage.length; index++) {
@@ -33,6 +35,8 @@ function viewProductStorage() {
   };
 
 }
+
+// Mise a jour du prix et de la quantité dans le panier
 
 function theQuantity() {
   const totalQuantity = document.getElementById("totalQuantity")
@@ -73,6 +77,8 @@ function update() {
   }
 }
 
+// Mise en place du bouton supprimé
+
 function deleteItemOnCart() {
   const deleteItem = document.getElementsByClassName("deleteItem")
   for (let index = 0; index < items.length; index++) {
@@ -90,6 +96,8 @@ function deleteItemOnCart() {
 
   }
 }
+
+// Mise en place du bouton commandé avec validation du formulaire
 
 function order() {
   const orderButton = document.getElementById("order")
@@ -149,10 +157,13 @@ function contactProductId() {
     productId = [cartItemInfo[index].dataset.id];
     productIds.push(productId)
   }
+  console.log(productIds)
   return productIds
 }
 
-function formValid(event) {
+// Gestion du formulaire avec les RegExp
+
+function formValid() {
   const inputFirstName = document.getElementById("firstName")
   const inputLastName = document.getElementById("lastName")
   const inputAddress = document.getElementById("address")

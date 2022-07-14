@@ -1,3 +1,5 @@
+// Mise en place du numéro de commande
+
 function orderNumber() {
     const windowsSearch = (window.location.search);
     const url = new URLSearchParams(windowsSearch)
